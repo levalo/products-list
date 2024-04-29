@@ -16,10 +16,13 @@ productRoute.get('/products', async (req, res) => {
         {
             $lookup: {
                 from: 'categories',
-                localField: "category",
+                localField: 'category',
                 foreignField: "_id",
-                as: "category"
+                as: 'category'
             }
+        },
+        {
+            $unwind: '$category'
         },
         {
             $project: {
