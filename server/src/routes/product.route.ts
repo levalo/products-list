@@ -32,6 +32,13 @@ productRoute.get('/products', async (req, res) => {
                 'category._id': 0,
                 'category.__v': 0
             }
+        },
+        {
+            $addFields: {
+                price: {
+                    $toDouble: '$price'
+                }
+            }
         }
     ]
 
@@ -39,15 +46,8 @@ productRoute.get('/products', async (req, res) => {
 
         query.push({
             $match: {
-                $or: [
-                    {
-                        name: { $regex: term, $options: 'i' }
-                    },
-                    {
-                        description: { $regex: term, $options: 'i' }
-                    }
-                ]
-            }
+                name: { $regex: term, $options: 'i' }
+            },
         })
     }
 
