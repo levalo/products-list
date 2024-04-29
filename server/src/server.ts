@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import dbConnect from './dbConnect'
 import productRoute from './routes/product.route'
@@ -18,6 +19,10 @@ if (!dbUri) {
 const app = express()
 
 app.use(bodyParser.json())
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001'
+}))
 
 app.use(categoryRoute)
 app.use(productRoute)
