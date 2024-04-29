@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "npx tsx src/server.ts --watch src",
+    "dev": "tsx watch ./src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
     "seed": "node dist/seeder.js",
