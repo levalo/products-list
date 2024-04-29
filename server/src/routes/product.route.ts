@@ -57,9 +57,9 @@ productRoute.get('/products', async (req, res) => {
     const total = (await productModel.aggregate(query).exec()).length
 
     const products = await productModel.aggregate(query)
+        .sort({ [sort]: sortOrd === 'asc' ? 1 : -1 })
         .skip((page - 1) * perPage)
         .limit(perPage)
-        .sort({ [sort]: sortOrd === 'asc' ? 1 : -1 })
         .exec()
 
     return res.status(200).json({
