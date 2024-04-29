@@ -53,7 +53,7 @@ dbConnect(dbUri).then(async () => {
         await productModel.create({
             name: customFaker.commerce.productName(),
             description: customFaker.commerce.productDescription(),
-            price: Number(customFaker.commerce.price({ min: 1.99, max: 199 })),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
             image: customFaker.image.urlLoremFlickr({ category: 'fashion' }),
             category: categories[Math.floor(Math.random() * categories.length)]
         })

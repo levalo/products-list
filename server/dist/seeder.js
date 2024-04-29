@@ -53,7 +53,7 @@ const customFaker = new faker_1.Faker({
         yield product_model_1.default.create({
             name: customFaker.commerce.productName(),
             description: customFaker.commerce.productDescription(),
-            price: Number(customFaker.commerce.price({ min: 1.99, max: 199 })),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
             image: customFaker.image.urlLoremFlickr({ category: 'fashion' }),
             category: categories[Math.floor(Math.random() * categories.length)]
         });

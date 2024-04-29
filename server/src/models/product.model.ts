@@ -9,7 +9,7 @@ const productSchema = new Schema({
         type: Schema.Types.String,
     },
     price: {
-        type: Schema.Types.Number,
+        type: Schema.Types.String,
         required: true
     },
     image: {
