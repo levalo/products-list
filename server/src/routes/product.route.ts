@@ -1,17 +1,18 @@
 import { Router } from 'express'
 import productModel from '../models/product.model'
 import { PipelineStage } from 'mongoose'
+import xss from 'xss'
 
 const productRoute = Router()
 
 productRoute.get('/products', async (req, res) => {
-    const perPage = typeof req.query.perPage === 'string' ? Math.max(1, parseInt(req.query.perPage)) : 10
-    const page = typeof req.query.page === 'string' ? Math.max(1, parseInt(req.query.page)) : 1
-    const term = typeof req.query.term === 'string' ? req.query.term : null
-    const category = typeof req.query.category === 'string' ? req.query.category : null
-    const sort = typeof req.query.sort === 'string' ? req.query.sort : 'price'
+    const perPage = typeof req.query.perPage === 'string' ? Math.max(1, parseInt(req.query.perPage) || 0) : 10
+    const page = typeof req.query.page === 'string' ? Math.max(1, parseInt(req.query.page) || 0) : 1
+    const term = typeof req.query.term === 'string' ? xss(req.query.term.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : null
+    const category = typeof req.query.category === 'string' ? xss(req.query.category.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : null
+    const sort = typeof req.query.sort === 'string' ? xss(req.query.sort.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : 'price'
     const sortOrd = typeof req.query.sortOrd === 'string' ? req.query.sortOrd : 'asc'
-    
+
     const query: PipelineStage[] = [
         {
             $lookup: {
@@ -35,6 +36,7 @@ productRoute.get('/products', async (req, res) => {
     ]
 
     if (term) {
+
         query.push({
             $match: {
                 $or: [
