@@ -5,9 +5,6 @@ const productSchema = new Schema({
         type: Schema.Types.String,
         required: true
     },
-    description: {
-        type: Schema.Types.String,
-    },
     price: {
         type: Schema.Types.String,
         required: true

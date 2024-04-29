@@ -14,22 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const product_model_1 = __importDefault(require("../models/product.model"));
+const xss_1 = __importDefault(require("xss"));
 const productRoute = (0, express_1.Router)();
 productRoute.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const perPage = typeof req.query.perPage === 'string' ? Math.max(1, parseInt(req.query.perPage)) : 10;
-    const page = typeof req.query.page === 'string' ? Math.max(1, parseInt(req.query.page)) : 1;
-    const term = typeof req.query.term === 'string' ? req.query.term : null;
-    const category = typeof req.query.category === 'string' ? req.query.category : null;
-    const sort = typeof req.query.sort === 'string' ? req.query.sort : 'price';
+    const perPage = typeof req.query.perPage === 'string' ? Math.max(1, parseInt(req.query.perPage) || 0) : 10;
+    const page = typeof req.query.page === 'string' ? Math.max(1, parseInt(req.query.page) || 0) : 1;
+    const term = typeof req.query.term === 'string' ? (0, xss_1.default)(req.query.term.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : null;
+    const category = typeof req.query.category === 'string' ? (0, xss_1.default)(req.query.category.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : null;
+    const sort = typeof req.query.sort === 'string' ? (0, xss_1.default)(req.query.sort.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')) : 'price';
     const sortOrd = typeof req.query.sortOrd === 'string' ? req.query.sortOrd : 'asc';
     const query = [
         {
             $lookup: {
                 from: 'categories',
-                localField: "category",
+                localField: 'category',
                 foreignField: "_id",
-                as: "category"
+                as: 'category'
             }
+        },
+        {
+            $unwind: '$category'
         },
         {
             $project: {
@@ -43,15 +47,8 @@ productRoute.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, fu
     if (term) {
         query.push({
             $match: {
-                $or: [
-                    {
-                        name: { $regex: term, $options: 'i' }
-                    },
-                    {
-                        description: { $regex: term, $options: 'i' }
-                    }
-                ]
-            }
+                name: { $regex: term, $options: 'i' }
+            },
         });
     }
     if (category) {
@@ -63,9 +60,9 @@ productRoute.get('/products', (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
     const total = (yield product_model_1.default.aggregate(query).exec()).length;
     const products = yield product_model_1.default.aggregate(query)
+        .sort({ [sort]: sortOrd === 'asc' ? 1 : -1 })
         .skip((page - 1) * perPage)
         .limit(perPage)
-        .sort({ [sort]: sortOrd === 'asc' ? 1 : -1 })
         .exec();
     return res.status(200).json({
         data: {

@@ -19,43 +19,55 @@ const customFaker = new Faker({
 
 dbConnect(dbUri).then(async () => {
     
-    const categories = []
-    
-    categories.push(await categoryModel.create({
-        name: 'Cotton'
-    }))
+    const cats = await categoryModel.create({
+        name: 'Cats'
+    })
 
-    categories.push(await categoryModel.create({
-        name: 'Polyester'
-    }))
-
-    categories.push(await categoryModel.create({
-        name: 'Wool'
-    }))
-
-    categories.push(await categoryModel.create({
-        name: 'Silk'
-    }))
-
-    categories.push(await categoryModel.create({
-        name: 'Denim'
-    }))
-
-    categories.push(await categoryModel.create({
-        name: 'Chiffon'
-    }))
-
-    categories.push(await categoryModel.create({
-        name: 'Leather'
-    }))
-
-    for(let i = 0; i < 100; i++) {
+    for(let i = 0; i < 40; i++) {
         await productModel.create({
             name: customFaker.commerce.productName(),
-            description: customFaker.commerce.productDescription(),
             price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
-            image: customFaker.image.urlLoremFlickr({ category: 'fashion' }),
-            category: categories[Math.floor(Math.random() * categories.length)]
+            image: customFaker.image.urlLoremFlickr({ category: 'cats' }),
+            category: cats
+        })
+    }
+
+    const technics = await categoryModel.create({
+        name: 'Technics'
+    })
+
+    for(let i = 0; i < 40; i++) {
+        await productModel.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'technics' }),
+            category: technics
+        })
+    }
+
+    const food = await categoryModel.create({
+        name: 'Food'
+    })
+
+    for(let i = 0; i < 40; i++) {
+        await productModel.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'food' }),
+            category: food
+        })
+    }
+
+    const nightlife = await categoryModel.create({
+        name: 'Nightlife'
+    })
+
+    for(let i = 0; i < 40; i++) {
+        await productModel.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'nightlife' }),
+            category: nightlife
         })
     }
 

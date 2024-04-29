@@ -27,35 +27,48 @@ const customFaker = new faker_1.Faker({
     locale: faker_1.en
 });
 (0, dbConnect_1.default)(dbUri).then(() => __awaiter(void 0, void 0, void 0, function* () {
-    const categories = [];
-    categories.push(yield category_model_1.default.create({
-        name: 'Cotton'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Polyester'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Wool'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Silk'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Denim'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Chiffon'
-    }));
-    categories.push(yield category_model_1.default.create({
-        name: 'Leather'
-    }));
-    for (let i = 0; i < 100; i++) {
+    const cats = yield category_model_1.default.create({
+        name: 'Cats'
+    });
+    for (let i = 0; i < 40; i++) {
         yield product_model_1.default.create({
             name: customFaker.commerce.productName(),
-            description: customFaker.commerce.productDescription(),
             price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
-            image: customFaker.image.urlLoremFlickr({ category: 'fashion' }),
-            category: categories[Math.floor(Math.random() * categories.length)]
+            image: customFaker.image.urlLoremFlickr({ category: 'cats' }),
+            category: cats
+        });
+    }
+    const technics = yield category_model_1.default.create({
+        name: 'Technics'
+    });
+    for (let i = 0; i < 40; i++) {
+        yield product_model_1.default.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'technics' }),
+            category: technics
+        });
+    }
+    const food = yield category_model_1.default.create({
+        name: 'Food'
+    });
+    for (let i = 0; i < 40; i++) {
+        yield product_model_1.default.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'food' }),
+            category: food
+        });
+    }
+    const nightlife = yield category_model_1.default.create({
+        name: 'Nightlife'
+    });
+    for (let i = 0; i < 40; i++) {
+        yield product_model_1.default.create({
+            name: customFaker.commerce.productName(),
+            price: customFaker.commerce.price({ min: 1.99, max: 199.99 }),
+            image: customFaker.image.urlLoremFlickr({ category: 'nightlife' }),
+            category: nightlife
         });
     }
     console.log('Database seeded successfully');

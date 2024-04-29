@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const dbConnect_1 = __importDefault(require("./dbConnect"));
 const product_route_1 = __importDefault(require("./routes/product.route"));
@@ -18,6 +19,9 @@ if (!dbUri) {
 }
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.use((0, cors_1.default)({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001'
+}));
 app.use(category_route_1.default);
 app.use(product_route_1.default);
 (0, dbConnect_1.default)(dbUri).then(() => {
